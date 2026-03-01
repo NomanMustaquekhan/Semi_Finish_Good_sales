@@ -1,0 +1,11 @@
+:root {
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --brand: #2563eb;
+}
+
+body {
+  font-family: Inter, system-ui, Arial, sans-serif;
+  background: #f7fafc;
+  color: #111827;
+}
