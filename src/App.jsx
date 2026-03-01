@@ -9,17 +9,6 @@ import useGoogleSheets from './hooks/useGoogleSheets'
 
 // ── REAL DATA FROM YOUR GOOGLE SHEET ─────────────────────────────────────────
 const RAW_DATA = [
-  { inv:"INV-001", date:"01-Apr-23", month:"Apr", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"FLY ASH",        qty:500,  rate:1200, price:600000,  total:660000,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-002", date:"15-Apr-23", month:"Apr", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"FLY ASH",        qty:620,  rate:1220, price:756400,  total:832040,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-003", date:"05-May-23", month:"May", year:2023, fy:"2023-24", customer:"ACC Limited",              material:"FLY ASH",        qty:450,  rate:1180, price:531000,  total:584100,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-004", date:"20-Jun-23", month:"Jun", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"MAGNETIC",       qty:180,  rate:4500, price:810000,  total:891000,  region:"Chhattisgarh", gst:9 },
-  { inv:"INV-005", date:"10-Jul-23", month:"Jul", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"FLY ASH",        qty:700,  rate:1250, price:875000,  total:962500,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-006", date:"25-Aug-23", month:"Aug", year:2023, fy:"2023-24", customer:"JK Cement",               material:"IRON ORE FINES", qty:300,  rate:3200, price:960000,  total:1056000, region:"Rajasthan",    gst:9 },
-  { inv:"INV-007", date:"12-Sep-23", month:"Sep", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"FLY ASH",        qty:580,  rate:1280, price:742400,  total:816640,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-008", date:"03-Oct-23", month:"Oct", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"ESP DUST",       qty:220,  rate:1800, price:396000,  total:435600,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-009", date:"18-Nov-23", month:"Nov", year:2023, fy:"2023-24", customer:"ACC Limited",              material:"FLY ASH",        qty:510,  rate:1260, price:642600,  total:706860,  region:"Maharashtra",  gst:9 },
-  { inv:"INV-010", date:"05-Dec-23", month:"Dec", year:2023, fy:"2023-24", customer:"Ultratech Cement Limited", material:"FLY ASH",        qty:650,  rate:1300, price:845000,  total:929500,  region:"Maharashtra",  gst:9 },
-  // ── ADD MORE ROWS FROM YOUR GOOGLE SHEET BELOW ───────────────────────────
   // Format: { inv, date, month, year, fy, customer, material, qty, rate, price, total, region, gst }
 ];
 
