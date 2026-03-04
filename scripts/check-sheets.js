@@ -1,9 +1,9 @@
 import https from 'https'
 
 const urls = [
-  'https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2023-24&tq=select%20*',
-  'https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2024-25&tq=select%20*',
-  'https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2025-26&tq=select%20*'
+  `https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2023-24&tq=select%20*&cachebust=${Date.now()}`,
+  `https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2024-25&tq=select%20*&cachebust=${Date.now()}`,
+  `https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2025-26&tq=select%20*&cachebust=${Date.now()}`
 ]
 
 function fetchUrl(u) {
