@@ -6,6 +6,12 @@ const urls = [
   `https://docs.google.com/spreadsheets/d/1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo/gviz/tq?tqx=out:json&sheet=FY%2025-26&tq=select%20*&cachebust=${Date.now()}`
 ]
 
+const REFRESH_INTERVAL = 5 * 60 * 1000; // every 5 minutes
+
+setInterval(() => {
+  loadAllSheets(); // call whatever your main data-loading function is
+}, REFRESH_INTERVAL);
+
 function fetchUrl(u) {
   return new Promise((resolve) => {
     https.get(u, (res) => {
