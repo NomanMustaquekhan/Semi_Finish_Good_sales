@@ -11,6 +11,53 @@ function parseGviz(text) {
   }
 }
 
+function buildSheetUrl(sheetId, sheetName) {
+  return (
+    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq` +
+    `?sheet=${encodeURIComponent(sheetName)}` +
+    `&tq=${encodeURIComponent('select *')}` +
+    `&cachebust=${Date.now()}`
+  )
+}
+
+function fetchGvizJsonp(url, timeoutMs = 15000) {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      reject(new Error('JSONP requires browser environment'))
+      return
+    }
+
+    const callbackName = `__gviz_cb_${Date.now()}_${Math.random().toString(36).slice(2)}`
+    const script = document.createElement('script')
+
+    const cleanUp = () => {
+      try { delete window[callbackName] } catch (e) {}
+      if (script.parentNode) script.parentNode.removeChild(script)
+    }
+
+    const timer = setTimeout(() => {
+      cleanUp()
+      reject(new Error('JSONP timeout while loading Google Sheets'))
+    }, timeoutMs)
+
+    window[callbackName] = (payload) => {
+      clearTimeout(timer)
+      cleanUp()
+      resolve(payload)
+    }
+
+    script.onerror = () => {
+      clearTimeout(timer)
+      cleanUp()
+      reject(new Error('JSONP script load failed'))
+    }
+
+    // gviz supports a custom response handler via tqx responseHandler.
+    script.src = `${url}&tqx=${encodeURIComponent(`out:json;responseHandler:${callbackName}`)}`
+    document.head.appendChild(script)
+  })
+}
+
 export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
   const { pollInterval = 60000 } = opts
   const [data, setData] = useState([])
@@ -24,17 +71,25 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
       try {
         const combined = []
         for (const name of sheetNames) {
-          // ✅ FIXED: absolute docs.google.com URL (not a relative /sheets/... proxy path)
-          // The Vite proxy only works in local dev — on GitHub Pages there is no proxy.
-          const url =
-            `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq` +
-            `?tqx=out:json` +
-            `&sheet=${encodeURIComponent(name)}` +
-            `&tq=${encodeURIComponent('select *')}` +
-            `&cachebust=${Date.now()}`  // bypass Google's aggressive caching
-          const res = await fetch(url)
-          const text = await res.text()
-          const json = parseGviz(text)
+          const url = buildSheetUrl(sheetId, name)
+          let json = null
+
+          // Try normal fetch first.
+          try {
+            const res = await fetch(`${url}&tqx=out:json`)
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            const text = await res.text()
+            json = parseGviz(text)
+          } catch (fetchErr) {
+            // Fallback for deployments where browser fetch/CORS behavior differs.
+            try {
+              json = await fetchGvizJsonp(url)
+            } catch (jsonpErr) {
+              console.error(`[useGoogleSheets] failed for sheet "${name}"`, fetchErr, jsonpErr)
+              continue
+            }
+          }
+
           if (!json || !json.table) continue
           const cols = (json.table.cols || []).map(c => (c.label || '').trim())
           const rows = json.table.rows || []
