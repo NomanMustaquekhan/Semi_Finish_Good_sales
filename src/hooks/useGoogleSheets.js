@@ -25,7 +25,12 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
         const combined = []
             for (const name of sheetNames) {
               // Use the dev-server proxy to avoid browser CORS issues
-              const url = `/sheets/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(name)}&tq=${encodeURIComponent('select *')}`
+              const url =
+            `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq` +
+            `?tqx=out:json` +
+            `&sheet=${encodeURIComponent(name)}` +
+            `&tq=${encodeURIComponent('select *')}` +
+            `&cachebust=${Date.now()}`  // bypass Google's aggressive caching`
               const res = await fetch(url)
           const text = await res.text()
           const json = parseGviz(text)
