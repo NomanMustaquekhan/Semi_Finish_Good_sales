@@ -23,15 +23,16 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
     async function fetchAll() {
       try {
         const combined = []
-            for (const name of sheetNames) {
-              // Use the dev-server proxy to avoid browser CORS issues
-              const url =
+        for (const name of sheetNames) {
+          // ✅ FIXED: absolute docs.google.com URL (not a relative /sheets/... proxy path)
+          // The Vite proxy only works in local dev — on GitHub Pages there is no proxy.
+          const url =
             `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq` +
             `?tqx=out:json` +
             `&sheet=${encodeURIComponent(name)}` +
             `&tq=${encodeURIComponent('select *')}` +
-            `&cachebust=${Date.now()}`  // bypass Google's aggressive caching`
-              const res = await fetch(url)
+            `&cachebust=${Date.now()}`  // bypass Google's aggressive caching
+          const res = await fetch(url)
           const text = await res.text()
           const json = parseGviz(text)
           if (!json || !json.table) continue
@@ -67,7 +68,6 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
                 const parsed = Date.parse(dateRaw)
                 if (!isNaN(parsed)) d = new Date(parsed)
               } else if (dateRaw && typeof dateRaw === 'object' && dateRaw['v']) {
-                // gviz sometimes returns date objects; try to parse .v
                 try { d = new Date(dateRaw.v) } catch (e) { d = null }
               } else if (dateRaw instanceof Date) {
                 d = dateRaw
@@ -86,7 +86,6 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
             norm.rate = Number(find(['rate','unit rate']) || 0)
             norm.total = Number(find(['total value','total value','gross value','price','total','total value']) || 0)
             norm.region = find(['region','ship to party - region','sold to party - regi','sold to party - region']) || ''
-            // keep any other fields as-is under original keys
             norm._raw = obj
             combined.push(norm)
           }
@@ -94,14 +93,11 @@ export default function useGoogleSheets(sheetId, sheetNames = [], opts = {}) {
         if (mounted.current) {
           setData(combined)
           try {
-            // debug: show number of rows fetched and a sample for verification
-            // (visible in browser console where React runs)
-            // eslint-disable-next-line no-console
             console.log('[useGoogleSheets] fetched rows:', combined.length, combined.slice(0,2))
           } catch (e) {}
         }
       } catch (e) {
-        // ignore
+        console.error('[useGoogleSheets] fetch error:', e)
       }
     }
 
