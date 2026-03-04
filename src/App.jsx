@@ -90,7 +90,7 @@ export default function Dashboard() {
 
   // Live Google Sheet configuration (update if you add FY 26-27 later)
   const SHEET_ID = '1O_7K012fvpLpLFdhOXXa6C3qFAldJ5DseBV_hcqSLzo'
-  const SHEET_NAMES = ['FY 23-24','FY 24-25','FY 25-26']
+  const SHEET_NAMES = ['FY 23-24','FY 24-25','FY 25-26','FY 26-27']
 
   // fetch live rows (poll every 60s). Falls back to the embedded `RAW_DATA`.
   const liveRows = useGoogleSheets(SHEET_ID, SHEET_NAMES, { pollInterval: 60000 })
@@ -218,7 +218,7 @@ export default function Dashboard() {
                   margin:0, fontSize:20, fontWeight:800, letterSpacing:0.3,
                   background:"linear-gradient(90deg,#FFFFFF,#A5B4FC)",
                   WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-                }}>By-Product Sales Dashboard: 3-Year Performance Analysis</h1>
+                }}>Semi Finished Goods</h1>
                 <p style={{ margin:0, fontSize:11, color:"#4B6A9B", letterSpacing:1.5, marginTop:2 }}>
                   MASTER DATA · FY 2023-24 TO 2025-26 · INTERACTIVE FILTERS
                 </p>
